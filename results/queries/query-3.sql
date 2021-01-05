@@ -1,4 +1,4 @@
 SELECT * 
 FROM orders 
-WHERE date>CURDATE() 
-ORDER BY id DESC;
+WHERE date (`date`) = CURRENT_DATE() 
+ORDER BY `date` DESC;

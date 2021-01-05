@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.5
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jan 04, 2021 at 10:35 AM
--- Server version: 5.7.24
--- PHP Version: 7.4.1
+-- Hôte : localhost
+-- Généré le : lun. 04 jan. 2021 à 14:30
+-- Version du serveur :  10.4.17-MariaDB
+-- Version de PHP : 8.0.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,230 +18,236 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `iteration3`
+-- Base de données : `mydb`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categories`
+-- Structure de la table `categories`
 --
 
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
-  `name` varchar(90) NOT NULL,
-  `description` text NOT NULL
+  `name` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `categories`
+-- Déchargement des données de la table `categories`
 --
 
-INSERT INTO `categories` (`id`, `name`, `description`) VALUES
-(1, 'cat 1', 'Une magnifique première catégorie'),
-(2, 'cat 2', '2ème catégorie'),
-(3, 'cat 3', '3ème catégorie');
+INSERT INTO `categories` (`id`, `name`) VALUES
+(1, 'cat1'),
+(2, 'cat2'),
+(3, 'cat3');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customers`
+-- Structure de la table `customers`
 --
 
 CREATE TABLE `customers` (
   `id` int(11) NOT NULL,
-  `first_name` varchar(90) NOT NULL,
-  `last_name` varchar(90) NOT NULL,
-  `adress` varchar(256) NOT NULL,
-  `city` varchar(90) NOT NULL
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `adress` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `postal` int(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `customers`
+-- Déchargement des données de la table `customers`
 --
 
-INSERT INTO `customers` (`id`, `first_name`, `last_name`, `adress`, `city`) VALUES
-(1, 'Chuck', 'Norris', 'Quelque part', 'Marseille'),
-(2, 'Charlize', 'Theron', 'Quelque part ailleurs', 'Grenoble'),
-(3, 'Ryan', 'Gosling', 'Je sais pas', 'Lyon');
+INSERT INTO `customers` (`id`, `first_name`, `last_name`, `adress`, `city`, `postal`) VALUES
+(2, 'Chuck', 'Norris', 'Texas Ranger', 'Kansas City', 37980),
+(4, 'Charlize', 'Theron', '221 Baker Street', 'London', 68795),
+(6, 'Ryan ', 'Gosling', 'La 3ème porte à droite', 'Malibu', 24168);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orders`
+-- Structure de la table `orders`
 --
 
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
-  `number` int(11) DEFAULT NULL,
-  `date` datetime NOT NULL,
-  `total` int(11) DEFAULT NULL,
+  `number` int(10) DEFAULT NULL,
+  `date` datetime DEFAULT NULL,
   `customer_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `orders`
+-- Déchargement des données de la table `orders`
 --
 
-INSERT INTO `orders` (`id`, `number`, `date`, `total`, `customer_id`) VALUES
-(1, 1, '2021-01-05 12:00:00', NULL, 1),
-(5, 2, '2021-01-05 09:00:00', NULL, 1),
-(6, 3, '2021-01-05 12:00:00', NULL, 2),
-(7, 4, '2021-01-05 11:00:00', NULL, 2),
-(8, 5, '2021-01-05 15:00:00', NULL, 2);
+INSERT INTO `orders` (`id`, `number`, `date`, `customer_id`) VALUES
+(3, 1, '2020-12-11 15:17:17', 2),
+(4, 2, '2021-01-05 12:26:00', 2),
+(5, 3, '2021-01-05 11:27:34', 4),
+(6, 4, '2020-05-11 15:25:34', 4),
+(7, 5, '2020-12-04 15:26:34', 4);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order_product`
+-- Structure de la table `order_product`
 --
 
 CREATE TABLE `order_product` (
-  `product_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
-  `quantity` tinyint(4) NOT NULL
+  `product_id` int(11) NOT NULL,
+  `quantity` int(2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `order_product`
+-- Déchargement des données de la table `order_product`
 --
 
-INSERT INTO `order_product` (`product_id`, `order_id`, `quantity`) VALUES
-(1, 4, 1),
-(3, 4, 2),
-(11, 5, 1),
-(10, 5, 2),
-(1, 6, 1),
-(9, 6, 1),
-(3, 7, 2),
-(13, 7, 1),
-(2, 8, 1),
-(12, 8, 1);
+INSERT INTO `order_product` (`order_id`, `product_id`, `quantity`) VALUES
+(3, 1, 1),
+(3, 3, 2),
+(4, 10, 2),
+(4, 13, 1),
+(5, 2, 1),
+(5, 9, 1),
+(6, 4, 2),
+(6, 12, 1),
+(7, 1, 1),
+(7, 11, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `products`
+-- Structure de la table `products`
 --
 
 CREATE TABLE `products` (
   `id` int(11) NOT NULL,
-  `name` varchar(90) NOT NULL,
-  `description` text NOT NULL,
-  `price` smallint(5) UNSIGNED NOT NULL,
-  `weight` mediumint(8) UNSIGNED NOT NULL,
-  `quantity` tinyint(3) UNSIGNED NOT NULL,
-  `image` varchar(90) NOT NULL,
-  `availability` tinyint(1) NOT NULL,
-  `categorie_id` int(11) NOT NULL
+  `name` varchar(255) DEFAULT NULL,
+  `description` longtext DEFAULT NULL,
+  `price` float DEFAULT NULL,
+  `weight` float DEFAULT NULL,
+  `available` tinyint(1) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `category_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `products`
+-- Déchargement des données de la table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `description`, `price`, `weight`, `quantity`, `image`, `availability`, `categorie_id`) VALUES
-(1, 'Nain A1', 'un beau nain A1', 100, 1000, 10, 'nainA1.jpg', 1, 1),
-(2, 'Nain A2', 'Un beau nain A2', 100, 1000, 10, 'nainA2.jpg', 1, 1),
-(3, 'Nain B1', 'un beau nain B1', 10, 500, 1, 'nainB1.jpg', 1, 1),
-(4, 'Nain B2', 'un beau nain B2', 10, 500, 1, 'nainB2.jpg', 1, 1),
-(5, 'Nain C1', 'un beau nain C1', 10, 500, 1, 'nainC1.jpg', 0, 1),
-(6, 'Nain C2', 'un beau nain C2', 10, 500, 1, 'nainC2.jpg', 0, 1),
-(7, 'Nain D1', 'un beau nain D1', 13, 500, 0, 'nainD1.jpg', 1, 2),
-(8, 'Nain D2', 'un beau nain D2', 13, 500, 0, 'nainD2.jpg', 1, 2),
-(9, 'Nain E1', 'un beau nain E1', 50, 1200, 2, 'nainE1.jpg', 1, 2),
-(10, 'Nain E2', 'un beau nain E2', 50, 1200, 2, 'nainE2.jpg', 1, 2),
-(11, 'Nain F1', 'une beau nain F1', 500, 1200, 5, 'nainF1.jpg', 1, 3),
-(12, 'Nain F2', 'une beau nain F2', 500, 1200, 5, 'nainF2.jpg', 1, 3),
-(13, 'Nain F3', 'un beau nain F3', 500, 1200, 5, 'nainF3.jpg', 1, 3);
+INSERT INTO `products` (`id`, `name`, `description`, `price`, `weight`, `available`, `image`, `category_id`, `quantity`) VALUES
+(1, 'Veal - Inside', 'Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.', 100, 1, 1, 'http://dummyimage.com/500x500.png/ff4444/ffffff', 1, 10),
+(2, 'Appetizer - Assorted Box', 'Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.', 100, 1, 1, 'http://dummyimage.com/500x500.bmp/dddddd/000000', 1, 10),
+(3, 'Pastry - Cheese Baked Scones', 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.', 10, 0.5, 1, 'http://dummyimage.com/500x500.png/cc0000/ffffff', 1, 1),
+(4, 'Beer - Chouffe', 'Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.', 10, 0.5, 1, 'http://dummyimage.com/500x500.png/ff4444/ffffff', 1, 1),
+(5, 'Jambon- Cheese Baked Scones', 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.', 10, 0.5, 0, 'http://dummyimage.com/500x500.png/cc0000/ffffff', 1, 1),
+(6, 'Beer - Heinekin', 'Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.', 10, 0.5, 0, 'http://dummyimage.com/500x500.png/ff4444/ffffff', 1, 1),
+(7, 'Poire- Delicious, Red', 'Sed ante. Vivamus tortor. Duis mattis egestas metus.', 13, 0.5, 1, 'http://dummyimage.com/500x500.jpg/dddddd/000000', 2, 0),
+(8, 'Cheese Cloth No 60', 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.', 13, 0.5, 1, 'http://dummyimage.com/500x500.bmp/ff4444/ffffff', 2, 0),
+(9, 'Banana- Delicious', 'Sed ante. Vivamus tortor. Duis mattis egestas metus.', 50, 1.2, 1, 'http://dummyimage.com/500x500.jpg/dddddd/000000', 2, 2),
+(10, 'bread Cloth No 60', 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.', 50, 1.2, 1, 'http://dummyimage.com/500x500.bmp/ff4444/ffffff', 2, 2),
+(11, 'Manzana- Delicious, Red', 'Sed ante. Vivamus tortor. Duis mattis egestas metus.', 500, 1.2, 1, 'http://dummyimage.com/500x500.jpg/dddddd/000000', 3, 5),
+(12, 'camembert Cloth No 60', 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.', 500, 1.2, 1, 'http://dummyimage.com/500x500.bmp/ff4444/ffffff', 3, 5),
+(13, 'Blueberry- Delicious, Red', 'Sed ante. Vivamus tortor. Duis mattis egestas metus.', 500, 1.2, 1, 'http://dummyimage.com/500x500.jpg/dddddd/000000', 3, 5);
 
 --
--- Indexes for dumped tables
+-- Index pour les tables déchargées
 --
 
 --
--- Indexes for table `categories`
+-- Index pour la table `categories`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `customers`
+-- Index pour la table `customers`
 --
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `orders`
+-- Index pour la table `orders`
 --
 ALTER TABLE `orders`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `customer_id` (`customer_id`);
+  ADD PRIMARY KEY (`id`,`customer_id`),
+  ADD KEY `fk_orders_customers1_idx` (`customer_id`);
 
 --
--- Indexes for table `order_product`
+-- Index pour la table `order_product`
 --
 ALTER TABLE `order_product`
-  ADD KEY `product_id` (`product_id`),
-  ADD KEY `order_id` (`order_id`);
+  ADD PRIMARY KEY (`order_id`,`product_id`),
+  ADD KEY `fk_orders_has_products_products1_idx` (`product_id`),
+  ADD KEY `fk_orders_has_products_orders1_idx` (`order_id`);
 
 --
--- Indexes for table `products`
+-- Index pour la table `products`
 --
 ALTER TABLE `products`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `categorie_id` (`categorie_id`);
+  ADD PRIMARY KEY (`id`,`category_id`),
+  ADD KEY `fk_products_categories_idx` (`category_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT pour les tables déchargées
 --
 
 --
--- AUTO_INCREMENT for table `categories`
+-- AUTO_INCREMENT pour la table `categories`
 --
 ALTER TABLE `categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `customers`
+-- AUTO_INCREMENT pour la table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `orders`
+-- AUTO_INCREMENT pour la table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `products`
---
-ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `orders`
---
-ALTER TABLE `orders`
-  ADD CONSTRAINT `customer_id` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`);
-
---
--- Constraints for table `order_product`
+-- AUTO_INCREMENT pour la table `order_product`
 --
 ALTER TABLE `order_product`
-  ADD CONSTRAINT `order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
-  ADD CONSTRAINT `product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- Constraints for table `products`
+-- AUTO_INCREMENT pour la table `products`
 --
 ALTER TABLE `products`
-  ADD CONSTRAINT `categorie_id` FOREIGN KEY (`categorie_id`) REFERENCES `categories` (`id`);
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `fk_orders_customers1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Contraintes pour la table `order_product`
+--
+ALTER TABLE `order_product`
+  ADD CONSTRAINT `fk_orders_has_products_orders1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_orders_has_products_products1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Contraintes pour la table `products`
+--
+ALTER TABLE `products`
+  ADD CONSTRAINT `fk_products_categories` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
